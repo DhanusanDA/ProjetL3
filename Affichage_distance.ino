@@ -19,9 +19,6 @@ void setup() {
   // LCD : 16 colonnes, 2 lignes
   lcd.begin(16, 2);
   
-  // Couleur de fond bleu
-  lcd.setRGB(0, 0, 255);
-  
   lcd.setCursor(0, 0);
   lcd.print("Distance:");
 
@@ -31,19 +28,22 @@ void setup() {
 
 void loop() {
   long distanceCm = ultrasonic.MeasureInCentimeters();
-  long distanceInch = ultrasonic.MeasureInInches();
+  
 
   // Moniteur serie
   Serial.println("------------------------");
   Serial.print("Distance : ");
   Serial.print(distanceCm);
   Serial.println(" cm");
- 
-
 
   // Affichage LCD
   lcd.setCursor(0, 1);
   lcd.print(distanceCm);
-  lcd.print("  cm");
+   
+   if (distanceCm < 10) {
+    lcd.print(" "); // ajoute un espace si 1 chiffre
+  }
+  lcd.print(distanceCm);
+  lcd.print(" cm ");
   delay(200);
 }
