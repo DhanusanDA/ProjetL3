@@ -16,8 +16,9 @@ void setup() {
 }
 
 void loop() {
+  long distanceCm = ultrasonic.MeasureInCentimeters();
   SuiviLigne();
-  if (pos == 0b0000){
+  if (distanceCm == 0.1){
     DetecterCouleur();
     while(true){
       LightSensorRGB_1.updataAllSensorValue();       // mise à jour du capteur
