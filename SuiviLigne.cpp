@@ -1,9 +1,10 @@
 #include "SuiviLigne.h"
 #include "piloterMoteur.h"
+#include "DetecterCouleur.h"
+#include "EvitementObstacle.h"
 
 MeRGBLineFollower LightSensorRGB_1(PORT_3);
 int vitesse = 30;
-int flag = 0;
 uint8_t pos = 0;
 
 //-------------------------------------------------
@@ -20,45 +21,38 @@ void avancer()
 //Fonction pour faire pivoter le robot a gauche
 void tournerGauche()
 {
-  //On diminue progresssivement le moteur gauche et on fait fonctionner le moteur droit a vitesse nominale
-  //while (pos != 0b1001){
-    piloterMoteur(MOTEUR_A, ARRIERE, 25); 
-    piloterMoteur(MOTEUR_B, AVANT, 40);
-    //vitesse = vitesse - 1;
-    //delay(300);
-  //}
+    piloterMoteur(MOTEUR_A, ARRIERE, 20); 
+    piloterMoteur(MOTEUR_B, AVANT, 42);
+}
+//Fonction pour faire pivoter le robot a gauche
+void tournerGaucheVariable(int VitesseGauche, int VitesseDroite)
+{
+    piloterMoteur(MOTEUR_A, ARRIERE, VitesseGauche); 
+    piloterMoteur(MOTEUR_B, AVANT, VitesseDroite);
+}
+//Fonction pour faire pivoter le robot a droite
+void tournerDroiteVariable(int VitesseGauche, int VitesseDroite)
+{
+    piloterMoteur(MOTEUR_A, ARRIERE, VitesseGauche); 
+    piloterMoteur(MOTEUR_B, AVANT, VitesseDroite);
+
 }
 //Fonction pour faire pivoter le robot a droite
 void tournerDroite()
 {
-  //On diminue progresssivement le moteur droit et on fait fonctionner le moteur gauche a vitesse nominale
-  //while (pos != 0b1001){
     piloterMoteur(MOTEUR_A, ARRIERE, 40); 
-    piloterMoteur(MOTEUR_B, AVANT, 25);
-    //vitesse = vitesse - 1;
-    //delay(300);
-  //}
+    piloterMoteur(MOTEUR_B, AVANT, 22);
 }
 void grandetournerGauche()
 {
-  //On diminue progresssivement le moteur gauche et on fait fonctionner le moteur droit a vitesse nominale
-  //while (pos != 0b1001){
-    piloterMoteur(MOTEUR_A, ARRIERE, 10); 
+    piloterMoteur(MOTEUR_A, ARRIERE, 13); 
     piloterMoteur(MOTEUR_B, AVANT, 40);
-    //vitesse = vitesse - 1;
-    //delay(300);
-  //}
 }
 //Fonction pour faire pivoter le robot a droite
 void grandetournerDroite()
 {
-  //On diminue progresssivement le moteur droit et on fait fonctionner le moteur gauche a vitesse nominale
-  //while (pos != 0b1001){
     piloterMoteur(MOTEUR_A, ARRIERE, 40); 
-    piloterMoteur(MOTEUR_B, AVANT, 10);
-    //vitesse = vitesse - 1;
-    //delay(300);
-  //}
+    piloterMoteur(MOTEUR_B, AVANT, 13);
 }
 //Fonction pour arreter le robot
 void arreter()
@@ -92,6 +86,7 @@ void SuiviLigne() {
     Serial.println("tournée à droite");
     tournerDroite();
   }
+  
   // Tout les cas de robot etant trop a gauche
   else if(pos == 0b1100 || pos == 0b1110 || pos == 0b1000){
     Serial.println("tournée à gauche");
@@ -112,5 +107,5 @@ void SuiviLigne() {
     Serial.println("flag");
 
   }
-  delay(50);
+  delay(10);
 }

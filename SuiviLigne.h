@@ -10,6 +10,8 @@ extern int vitesse;
 void avancer();
 void tournerGauche();
 void tournerDroite();
+void tournerGaucheVariable(int VitesseGauche, int VitesseDroite);
+void tournerDroiteVariable(int VitesseGauche, int VitesseDroite);
 void grandetournerGauche();
 void grandetournerDroite();
 void arreter();

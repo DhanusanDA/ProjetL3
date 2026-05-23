@@ -5,101 +5,55 @@ Adafruit_TCS34725 tcs = Adafruit_TCS34725(
   TCS34725_GAIN_4X
 );
 
-void classifierCouleur(uint8_t &r, uint8_t &g, uint8_t &b) {
-
-  // Rouge pur : R dominant
-  if (r >= SEUIL_DOMINANT && g < SEUIL_ABSENT && b < SEUIL_ABSENT) {
-    r = 255; g = 0; b = 0;
-    Serial.println("Couleur detectee : ROUGE");
-    return;
-  }
-  // Vert pur : G dominant
-  if (g >= SEUIL_DOMINANT && r < SEUIL_ABSENT && b < SEUIL_ABSENT) {
-    r = 0; g = 255; b = 0;
-    Serial.println("Couleur detectee : VERT");
-    return;
-  }
-  // Bleu pur : B dominant
-  if (b >= SEUIL_DOMINANT && r < SEUIL_ABSENT && g < SEUIL_ABSENT) {
-    r = 0; g = 0; b = 255;
-    Serial.println("Couleur detectee : BLEU");
-    return;
-  }
-
-  // Jaune : R et G présents
-  if (r >= SEUIL_MIXTE && g >= SEUIL_MIXTE && b < SEUIL_ABSENT) {
-    r = 255; g = 255; b = 0;
-    Serial.println("Couleur detectee : JAUNE");
-    return;
-  }
-  /* Cyan : G et B présents
-  if (g >= SEUIL_MIXTE && b >= SEUIL_MIXTE && r < SEUIL_ABSENT) {
-    r = 0; g = 255; b = 255;
-    Serial.println("Couleur detectee : CYAN");
-    return;
-  }
-  // Magenta : R et B présents
-  if (r >= SEUIL_MIXTE && b >= SEUIL_MIXTE && g < SEUIL_ABSENT) {
-    r = 255; g = 0; b = 255;
-    Serial.println("Couleur detectee : MAGENTA");
-    return;
-  }
-
-  // Blanc 
-  if (r >= SEUIL_MIXTE && g >= SEUIL_MIXTE && b >= SEUIL_MIXTE) {
-    r = 255; g = 255; b = 255;
-    Serial.println("Couleur detectee : BLANC");
-    return;
-  }*/
-}
-
 void DetecterCouleur(){
-  Serial.println("debut loop");
-  uint16_t r, g, b, c;
+    uint16_t r, g, b, c;
+    tcs.getRawData(&r, &g, &b, &c);
 
-  // Allumer la LED du capteur pour éclairer l'objet
-  //tcs.setInterrupt(false);
-  delay(10);
+    Serial.print("R:"); Serial.print(r);
+    Serial.print(" G:"); Serial.print(g);
+    Serial.print(" B:"); Serial.println(b);
 
-  unsigned long debut = millis();
-  // Lire les valeurs brutes
-  tcs.getRawData(&r, &g, &b, &c);
-  if (millis() - debut > 200) {
-      Serial.println("TIMEOUT I2C !");
-  }
-
-  // Éteindre la LED du capteur
-  //tcs.setInterrupt(true);
-
-  // Éviter division par zéro
-  if (c == 0) return;
-
-  // Normaliser vers 0-255
-  uint8_t red   = constrain((uint32_t)r * 255 / c, 0, 255);
-  uint8_t green = constrain((uint32_t)g * 255 / c, 0, 255);
-  uint8_t blue  = constrain((uint32_t)b * 255 / c, 0, 255);
-  
-  // Seuil des couleurs pour une couleur plus vive
-  uint8_t maxVal = max(red, max(green, blue));
-  if (maxVal == 0) return;
-
-  red = (uint32_t)red * 255 / maxVal;
-  green = (uint32_t)green * 255 / maxVal;
-  blue = (uint32_t)blue * 255 / maxVal;
-  
-  // Moniteur série
-  Serial.print("R: "); Serial.print(red);
-  Serial.print(" G: "); Serial.print(green);
-  Serial.print(" B: "); Serial.println(blue);
-
-  classifierCouleur(red, green, blue);
-
-  // Afficher la couleur sur toutes les LEDs
-  for (int i = 0; i < LED_COUNT; i++) {
-    strip.setPixelColor(i, strip.Color(red, green, blue));
-    delay(10);
-  }
-  strip.show();
-
-  delay(10);
+    // Trouver couleur dominante
+    if (r > g && r > b) {
+      Serial.println("→ ROUGE");
+      for (int i = 0; i < 3; i++) {
+        ONLED(255, 0, 0);
+        delay(500);
+        OFFLED();
+      }
+    }
+    else if (g > r && g > b) {
+      Serial.println("→ VERT");
+      for (int i = 0; i < 3; i++) {
+        ONLED(0, 255, 0);
+        delay(500);
+        OFFLED();
+      }
+    }
+    else if (b > r && b > g) {
+      Serial.println("→ BLEU");
+      for (int i = 0; i < 3; i++) {
+        ONLED(0, 0, 255);
+        delay(500);
+        OFFLED();
+      }
+    }
+    else {
+      Serial.println("→ BLANC");
+      ONLED(255, 255, 255);
+    }
 }
+void ONLED(uint8_t r, uint8_t g, uint8_t b) {
+    for (int i = 0; i < LED_COUNT; i++) {
+      strip.setPixelColor(i, strip.Color(r, g, b));
+    }
+    strip.show();
+}
+
+void OFFLED() {
+    for (int i = 0; i < LED_COUNT; i++) {
+      strip.setPixelColor(i, 0);
+    }
+    strip.show();
+}
+
