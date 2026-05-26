@@ -2,5 +2,5 @@
 #define RECUPLIGNE_H
 #include "EvitementObstacle.h"
 
-void RecupLigne (int a , int b);
+void RecupLigne (int a , int b, int c);
 #endif

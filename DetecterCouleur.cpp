@@ -20,6 +20,7 @@ void DetecterCouleur(){
         ONLED(255, 0, 0);
         delay(500);
         OFFLED();
+        delay(500);
       }
     }
     else if (g > r && g > b) {
@@ -28,14 +29,14 @@ void DetecterCouleur(){
         ONLED(0, 255, 0);
         delay(500);
         OFFLED();
+        delay(500);
       }
     }
     else if (b > r && b > g) {
       Serial.println("→ BLEU");
       for (int i = 0; i < 3; i++) {
         ONLED(0, 0, 255);
-        delay(500);
-        OFFLED();
+        
       }
     }
     else {

@@ -44,7 +44,7 @@ else {
 
 if (pos == 0b1001 || pos == 0b0011 ){
   //arreter();
-  RecupLigne(ARRIERE, ARRIERE);
+  RecupLigne(ARRIERE, ARRIERE, 200);
   delay(500);
 }
 }

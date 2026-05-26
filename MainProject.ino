@@ -25,6 +25,13 @@ void setup() {
   Serial.println("Test Mini I2C Motor Driver (DRV8830)");
   myservo.attach(A0);  // attaches the servo on pin 9 to the Servo object
   LightSensorRGB_1.begin();
+
+
+  
+  strip.begin();
+  strip.setBrightness(150);
+  strip.show();
+  tcs.begin();
   lcd.begin(16, 2);
   lcd.setRGB(colorR, colorG, colorB);
   Serial.println("Initialisation terminee");
@@ -33,13 +40,13 @@ void setup() {
 }
 
 void loop(){
-
   //-------------------------------------------------
   //Départ
   //-------------------------------------------------
+
   while (FLAG0 == false){
     arreter();
-    while(pos == 0b0000){
+    while(pos != 0b0000){
       LightSensorRGB_1.updataAllSensorValue();
       pos = LightSensorRGB_1.getPositionState();
     }
@@ -72,14 +79,14 @@ void loop(){
     Dist = ultrasonic.MeasureInCentimeters();//M.a.j de Distance
     Serial.println(Dist);
     myservo.write(90);
-    if(Dist <= 20 && FLAG2 == false && FLAG1 == true)
+    if(Dist <= 18 && FLAG2 == false && FLAG1 == true)
     {
       Serial.println("Evitement 1");
       EvitementObstacle(1);
       FLAG2 = true;
       Serial.println(FLAG2);
     }
-    else if(Dist <= 20 && FLAG2 == true)
+    else if(Dist <= 15 && FLAG2 == true)
     {
       Serial.println("Evitement 2");
       EvitementObstacle(2);
@@ -93,10 +100,11 @@ void loop(){
   //Detection de couleur et Demi-tour - Section 5&6&7
   //-------------------------------------------------
   while(FLAG4==false){
-     myservo.write(90);
+    myservo.write(90);
     SuiviLigne();
     Dist = ultrasonic.MeasureInCentimeters(); //M.a.j de Distance
-    if (Dist<=2){
+    if (Dist<=14){
+      arreter();
       DetecterCouleur();
       DemiTour();
       FLAG4 = true;
@@ -108,6 +116,6 @@ void loop(){
   //-------------------------------------------------
   while(FLAG5==false){
     SuiviLigne();
+    if (pos==0b0000){FLAG5 = true;}
   }
-
 }

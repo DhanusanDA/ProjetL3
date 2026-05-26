@@ -15,15 +15,10 @@ uint8_t pos = 0;
 void avancer() 
 {
   //On met les deux moteurs a la même vitesse de rotation
-  piloterMoteur(MOTEUR_A, ARRIERE, 40); 
-  piloterMoteur(MOTEUR_B, AVANT, 40);
+  piloterMoteur(MOTEUR_A, ARRIERE, 42); 
+  piloterMoteur(MOTEUR_B, AVANT, 42);
 }
-//Fonction pour faire pivoter le robot a gauche
-void tournerGauche()
-{
-    piloterMoteur(MOTEUR_A, ARRIERE, 20); 
-    piloterMoteur(MOTEUR_B, AVANT, 42);
-}
+
 //Fonction pour faire pivoter le robot a gauche
 void tournerGaucheVariable(int VitesseGauche, int VitesseDroite)
 {
@@ -37,22 +32,39 @@ void tournerDroiteVariable(int VitesseGauche, int VitesseDroite)
     piloterMoteur(MOTEUR_B, AVANT, VitesseDroite);
 
 }
+//Fonction pour faire pivoter le robot a gauche
+void tournerGauche()
+{
+    piloterMoteur(MOTEUR_A, ARRIERE, 24); 
+    piloterMoteur(MOTEUR_B, AVANT, 32);
+}
 //Fonction pour faire pivoter le robot a droite
 void tournerDroite()
 {
+    piloterMoteur(MOTEUR_A, ARRIERE, 32); 
+    piloterMoteur(MOTEUR_B, AVANT, 24);
+}
+void moytournerGauche()
+{
+    piloterMoteur(MOTEUR_A, ARRIERE, 20); 
+    piloterMoteur(MOTEUR_B, AVANT, 40);
+}
+//Fonction pour faire pivoter le robot a droite
+void moytournerDroite()
+{
     piloterMoteur(MOTEUR_A, ARRIERE, 40); 
-    piloterMoteur(MOTEUR_B, AVANT, 22);
+    piloterMoteur(MOTEUR_B, AVANT, 20);
 }
 void grandetournerGauche()
 {
-    piloterMoteur(MOTEUR_A, ARRIERE, 13); 
-    piloterMoteur(MOTEUR_B, AVANT, 40);
+    piloterMoteur(MOTEUR_A, ARRIERE, 12); 
+    piloterMoteur(MOTEUR_B, AVANT, 42);
 }
 //Fonction pour faire pivoter le robot a droite
 void grandetournerDroite()
 {
-    piloterMoteur(MOTEUR_A, ARRIERE, 40); 
-    piloterMoteur(MOTEUR_B, AVANT, 13);
+    piloterMoteur(MOTEUR_A, ARRIERE, 42); 
+    piloterMoteur(MOTEUR_B, AVANT, 12);
 }
 //Fonction pour arreter le robot
 void arreter()
@@ -69,7 +81,6 @@ void arreter()
 void SuiviLigne() {
   LightSensorRGB_1.updataAllSensorValue();
   pos = LightSensorRGB_1.getPositionState();
-  Serial.println(pos, BIN);
 
   // Cas du  robot centré
   if(pos == 0b1001){ 
@@ -77,29 +88,27 @@ void SuiviLigne() {
     avancer();
   }
     // Tout les cas de robot etant trop a gauche
-  else if(pos == 0b1101){
+  else if(pos == 0b1101 || pos == 0b1100){
     Serial.println("tournée à gauche");
     tournerGauche();
   }
   // Tout les cas de robot etant trop a droite
-  else if(pos == 0b1011){
+  else if(pos == 0b1011 || pos == 0b0011){
     Serial.println("tournée à droite");
     tournerDroite();
   }
-  
   // Tout les cas de robot etant trop a gauche
-  else if(pos == 0b1100 || pos == 0b1110 || pos == 0b1000){
+  else if(pos == 0b1110 || pos == 0b1000){
     Serial.println("tournée à gauche");
     grandetournerGauche();
   }
   // Tout les cas de robot etant trop a droite
-  else if(pos == 0b0001 || pos == 0b0011 || pos == 0b0111){
+  else if(pos == 0b0001 || pos == 0b0111){
     Serial.println("tournée à droite");
     grandetournerDroite();
   }
   // Cas où la ligne est pleine donc arret
   else if (pos == 0b0000){
-    Serial.println("arret");
     arreter();
   }
   // Flag
@@ -107,5 +116,4 @@ void SuiviLigne() {
     Serial.println("flag");
 
   }
-  delay(10);
 }

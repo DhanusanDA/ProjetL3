@@ -42,13 +42,13 @@ void EvitementObstacle(int i)
       Dist = ultrasonic.MeasureInCentimeters();
       Serial.println(Dist);
     }
-    delay(1000);
+    delay(1300);
     piloterMoteur(MOTEUR_A, ARRIERE, 25); 
     piloterMoteur(MOTEUR_B, ARRIERE, 25);
 
     delay(1000);
     avancer();
-    RecupLigne(AVANT, AVANT);
+    RecupLigne(AVANT, AVANT, 200);
   }
 
     if(i==2)
@@ -88,8 +88,8 @@ void EvitementObstacle(int i)
       Dist = ultrasonic.MeasureInCentimeters();
       Serial.println(Dist);
     }
-    piloterMoteur(MOTEUR_A, ARRIERE, 39); 
+    piloterMoteur(MOTEUR_A, ARRIERE, 32); 
     piloterMoteur(MOTEUR_B, AVANT, 42);
-    RecupLigne(ARRIERE, ARRIERE);
+    RecupLigne(ARRIERE, ARRIERE, 150);
   }
 }
