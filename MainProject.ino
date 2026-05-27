@@ -8,6 +8,7 @@
 #include "RecupLigne.h"
 #include "DemiTour.h"
 #include "AfficheMessage.h"
+#include "piloterTir.h"
 
 //-------------------------------------------------
 // Définition des flags qui permettent de séparer les différentes sections
@@ -18,6 +19,7 @@ bool FLAG2 = false;   // Section 3
 bool FLAG3 = false;   // Section 4
 bool FLAG4 = false;   // Section 5&6&7
 bool FLAG5 = false;   // Section 10&11
+bool FLAG6 = false;
 
 void setup() {
   Wire.begin();
@@ -40,6 +42,7 @@ void setup() {
 }
 
 void loop(){
+  /*
   //-------------------------------------------------
   //Départ
   //-------------------------------------------------
@@ -117,5 +120,13 @@ void loop(){
   while(FLAG5==false){
     SuiviLigne();
     if (pos==0b0000){FLAG5 = true;}
+  }
+  */
+  while(FLAG6 == false){
+  piloterTir(MOTEUR_C, ARRIERE, 63);
+  delay(4000);
+  piloterTir(MOTEUR_C, ARRET, 63);
+  piloterTir(MOTEUR_D, ARRIERE, 63);
+  FLAG6 = true;
   }
 }
