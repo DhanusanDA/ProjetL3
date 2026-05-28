@@ -2,6 +2,7 @@
 #define AFFICHEMESSAGE_H
 #include <Wire.h>
 #include "rgb_lcd.h"
+#include "Catapulte.h"
 
 extern rgb_lcd lcd;
 
